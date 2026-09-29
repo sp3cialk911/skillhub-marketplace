@@ -7,7 +7,7 @@ const router = express.Router();
 // List skills (local marketplace)
 router.get('/', async (req, res, next) => {
   try {
-    const { page = 1, limit = 20, category, search, location, radius = 50, sort = '-rating' } = req.query;
+    const { page = 1, limit = 20, category, search, location, sort = '-rating' } = req.query;
     const offset = (page - 1) * limit;
 
     let sql = 'SELECT s.*, u.first_name, u.last_name, u.location FROM skills s JOIN users u ON s.user_id = u.id WHERE s.is_available = true';
@@ -28,8 +28,10 @@ router.get('/', async (req, res, next) => {
       params.push(`%${location}%`);
     }
 
-    const sortField = sort.startsWith('-') ? sort.slice(1) : sort;
-    const sortOrder = sort.startsWith('-') ? 'DESC' : 'ASC';
+    const requestedSort = typeof sort === 'string' ? sort : '-rating';
+    const requestedSortField = requestedSort.startsWith('-') ? requestedSort.slice(1) : requestedSort;
+    const sortField = ['rating', 'skill_name', 'created_at'].includes(requestedSortField) ? requestedSortField : 'rating';
+    const sortOrder = requestedSort.startsWith('-') ? 'DESC' : 'ASC';
     sql += ` ORDER BY s.${sortField} ${sortOrder} LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
     params.push(limit, offset);
 

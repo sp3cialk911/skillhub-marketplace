@@ -1,6 +1,6 @@
 import { logger } from '../utils/logger.js';
 
-export const errorHandler = (err, req, res, next) => {
+export const errorHandler = (err, req, res, _next) => {
   logger.error('Error:', err);
 
   const statusCode = err.statusCode || 500;
