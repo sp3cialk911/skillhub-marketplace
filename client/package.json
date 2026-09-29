@@ -29,8 +29,8 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.1.1",
-    "vite": "^5.0.2",
-    "vitest": "^0.34.6",
+    "vite": "^6.4.3",
+    "vitest": "^4.1.11",
     "eslint": "^8.52.0",
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.31"
