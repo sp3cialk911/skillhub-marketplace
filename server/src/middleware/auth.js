@@ -1,6 +1,4 @@
 import jwt from 'jsonwebtoken';
-import { query } from '../database/db.js';
-
 export const authenticate = (req, res, next) => {
   try {
     const token = req.headers.authorization?.split(' ')[1];

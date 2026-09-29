@@ -25,8 +25,7 @@ router.post('/', authenticate, async (req, res, next) => {
       [reviewerId, revieweeId, rating, comment, entityType, entityId]
     );
 
-    // Update average rating
-    const avgResult = await query(
+    await query(
       'SELECT AVG(rating)::DECIMAL(3,2) as avg_rating FROM reviews WHERE reviewee_id = $1',
       [revieweeId]
     );

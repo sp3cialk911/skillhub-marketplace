@@ -65,7 +65,7 @@ app.use((req, res) => {
 app.use(errorHandler);
 
 // Database Connection Test
-pool.query('SELECT NOW()', (err, res) => {
+pool.query('SELECT NOW()', (err, _res) => {
   if (err) {
     logger.error('Database connection failed:', err);
   } else {

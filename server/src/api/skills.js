@@ -7,7 +7,7 @@ const router = express.Router();
 // List skills (local marketplace)
 router.get('/', async (req, res, next) => {
   try {
-    const { page = 1, limit = 20, category, search, location, radius = 50, sort = '-rating' } = req.query;
+    const { page = 1, limit = 20, category, search, location, sort = '-rating' } = req.query;
     const offset = (page - 1) * limit;
 
     let sql = 'SELECT s.*, u.first_name, u.last_name, u.location FROM skills s JOIN users u ON s.user_id = u.id WHERE s.is_available = true';

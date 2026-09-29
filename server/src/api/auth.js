@@ -1,5 +1,6 @@
 import express from 'express';
 import Joi from 'joi';
+import jwt from 'jsonwebtoken';
 import { query } from '../database/db.js';
 import { hashPassword, comparePassword } from '../utils/hash.js';
 import { generateToken, generateRefreshToken } from '../utils/jwt.js';
@@ -132,7 +133,7 @@ router.post('/login', async (req, res, next) => {
 });
 
 // Refresh Token
-router.post('/refresh', async (req, res, next) => {
+router.post('/refresh', async (req, res) => {
   try {
     const { refreshToken } = req.body;
     if (!refreshToken) {
@@ -144,7 +145,7 @@ router.post('/refresh', async (req, res, next) => {
       });
     }
 
-    const decoded = JWT.verify(refreshToken, process.env.JWT_SECRET);
+    const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET);
     const token = generateToken({ id: decoded.id, email: decoded.email });
 
     res.json({ token });
