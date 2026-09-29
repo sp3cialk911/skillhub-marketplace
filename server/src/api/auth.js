@@ -1,4 +1,5 @@
 import express from 'express';
+import rateLimit from 'express-rate-limit';
 import Joi from 'joi';
 import jwt from 'jsonwebtoken';
 import { query } from '../database/db.js';
@@ -6,6 +7,12 @@ import { hashPassword, comparePassword } from '../utils/hash.js';
 import { generateToken, generateRefreshToken } from '../utils/jwt.js';
 
 const router = express.Router();
+const refreshLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false
+});
 
 const registerSchema = Joi.object({
   email: Joi.string().email().required(),
@@ -133,7 +140,7 @@ router.post('/login', async (req, res, next) => {
 });
 
 // Refresh Token
-router.post('/refresh', async (req, res) => {
+router.post('/refresh', refreshLimiter, async (req, res) => {
   try {
     const { refreshToken } = req.body;
     if (!refreshToken) {

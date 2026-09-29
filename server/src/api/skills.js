@@ -28,8 +28,10 @@ router.get('/', async (req, res, next) => {
       params.push(`%${location}%`);
     }
 
-    const sortField = sort.startsWith('-') ? sort.slice(1) : sort;
-    const sortOrder = sort.startsWith('-') ? 'DESC' : 'ASC';
+    const requestedSort = typeof sort === 'string' ? sort : '-rating';
+    const requestedSortField = requestedSort.startsWith('-') ? requestedSort.slice(1) : requestedSort;
+    const sortField = ['rating', 'skill_name', 'created_at'].includes(requestedSortField) ? requestedSortField : 'rating';
+    const sortOrder = requestedSort.startsWith('-') ? 'DESC' : 'ASC';
     sql += ` ORDER BY s.${sortField} ${sortOrder} LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
     params.push(limit, offset);
 
